@@ -42,19 +42,22 @@ async def process_unstats_command(message: Message):
     await message.answer(text=LEXICON_RU['/unstats'])
 
 # Этот хэндлер срабатывает на "Давай!"
-@router.message(F.text == 'Давай!')
+@router.message(F.text == LEXICON_RU['go_game'])
 async def process_start_game_command(message: Message):
     await message.answer(text=LEXICON_RU["start_game"],
                          reply_markup=Keyboard.keyboard_generator(config.GAME_DICT).as_markup(resize_keyboard=True) )
 
 # Этот хэндлер срабатывает на "Не хочу!"
-@router.message(F.text == 'Не хочу!')
+@router.message(F.text == LEXICON_RU['dont_game'])
 async def process_no_game_command(message: Message):
     await message.answer(text=LEXICON_RU['no_game'], reply_markup=ReplyKeyboardRemove())
 
 # Хэндлер для обработки выбора пользователя во время игры
-@router.message(or_f(F.text == 'Камень', F.text == 'Ножницы', F.text == 'Бумага'))
+@router.message(F.text.in_([LEXICON_RU['rock'],
+                            LEXICON_RU['paper'],
+                            LEXICON_RU['scissors']]))
 async def process_in_game_command(message: Message):
-    await message.answer(text=await game_process.game(message.text, message.from_user.id) + '\n\nСыграем еще раз?', reply_markup=Keyboard.keyboard_generator(config.MAIN_MENU).as_markup(resize_keyboard=True))
+    await message.answer(text=await game_process.game(message.text, message.from_user.id), reply_markup=Keyboard.keyboard_generator(config.MAIN_MENU).as_markup(resize_keyboard=True))
+    await message.answer(text=LEXICON_RU['go_new_game'])
 
 

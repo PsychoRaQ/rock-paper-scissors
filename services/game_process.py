@@ -1,20 +1,21 @@
 from config_data import config
 from random import randint
 from services import stats
+from lexicon import lexicon
 
 # Основная логика работы игры
 async def game(player, user_id) -> str:
     result = None
     BOT_SCORE = randint(1,3)
-    rules = {'Камень':1, 'Ножницы': 2, 'Бумага': 3}
+    rules = {lexicon.LEXICON_RU['rock']:1, lexicon.LEXICON_RU['scissors']: 2, lexicon.LEXICON_RU['paper']: 3}
     bot_chosen = config.GAME_DICT[BOT_SCORE-1]
     player_score = rules[player]
 
-    player_win = f'{bot_chosen = }\n{player = }\nИгрок выиграл!'
-    bot_win = f'{bot_chosen = }\n{player = }\nБот выиграл!'
+    player_win = f'Выбор бота: {bot_chosen}\nВыбор игрока:{player}\n\nИгрок выиграл!'
+    bot_win = f'Выбор бота:{bot_chosen}\nВыбор игрока:{player}\n\nБот выиграл!'
 
     if BOT_SCORE == player_score:
-        result = f'{bot_chosen = }\n{player = }\nНичья!'
+        result = f'Выбор бота:{bot_chosen}\nВыбор игрока:{player}\nНичья!'
     elif player_score == 3:
         if BOT_SCORE == 1:
             result = player_win
